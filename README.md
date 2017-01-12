@@ -1,5 +1,5 @@
 # Checker
-The minimum code to demo how to use expression tree/lambda, extension methods to implements fluent api.
+The minimum code to demo how to use expression tree/lambda, extension methods to implement fluent api.
 
 # What's Fluent API
 [This article](http://rrpblog.azurewebsites.net/?p=33) explains it much better than I ever could.
@@ -17,3 +17,42 @@ The price of this fluency is more effort, both in thinking and in the API constr
 much easier to write. Coming up with a nice fluent API requires a good bit of thought.
 
 As in most cases API's are created once and used over and over again, the extra effort may be worth it.
+
+# How to use
+
+```csharp
+public class User
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
+
+    public int Age { get; set; }
+}
+
+public class UserChecker : CheckerBase<User>
+{
+    public UserChecker()
+    {
+        RuleFor(u => u.Username).NotEmpty();
+        RuleFor(u => u.Password).NotEmpty();
+        RuleFor(u => u.Age).LessThan(100);
+    }
+}
+
+[Fact]
+public void Checking_FluentApi_Test()
+{
+    var user = new User
+    {
+        Username = "rigofunc",
+        Password = "p@ssword",
+        Age = 31,
+    };
+
+    var checker = new UserChecker();
+
+    var result = checker.Check(user);
+
+    Assert.IsTrue(result.Succeed);
+}
+```
