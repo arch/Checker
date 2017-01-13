@@ -9,11 +9,10 @@ namespace Checking.FluentApi
     {
         private readonly IList<IPropertyChecker<T, TProperty>> checkers = new List<IPropertyChecker<T, TProperty>>();
 
-        public PropertyRule(MemberInfo member, Func<T, TProperty> propertyFunc, LambdaExpression expression, Type typeToValidate)
+        public PropertyRule(MemberInfo member, Func<T, TProperty> propertyFunc, Type typeToValidate)
         {
             Member = member;
             PropertyFunc = propertyFunc;
-            Expression = expression;
             TypeToValidate = typeToValidate;
         }
 
@@ -23,7 +22,7 @@ namespace Checking.FluentApi
 
             var compiled = expression.Compile();
 
-            return new PropertyRule<T, TProperty>(member, compiled, expression, typeof(TProperty));
+            return new PropertyRule<T, TProperty>(member, compiled, typeof(TProperty));
         }
 
         public MemberInfo Member { get; }
